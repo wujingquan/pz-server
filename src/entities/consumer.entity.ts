@@ -1,13 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
 @Entity({ name: 'consumer' })
 export default class Consumer extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  @ApiProperty()
-  id: number;
-
   @Column()
   @ApiProperty()
   name: string;

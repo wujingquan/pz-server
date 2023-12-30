@@ -6,10 +6,12 @@ import { HomeService } from './home.service';
 import Banner from '@/entities/admin/banner.entity';
 import { Authorize } from '@/modules/admin/core/decorators/authorize.decorator';
 import hospital from '@/modules/api/home/data/hospital';
-import city from '@/modules/api/home/data/city';
 import nav from '@/modules/api/home/data/nav';
 import server from '@/modules/api/home/data/server';
 import Consumer from '@/entities/consumer.entity';
+import City from '@/entities/city.entity';
+import { Page } from '@/common/decorators/page.decorator';
+import Hospital from '@/entities/hospital.entity';
 
 @Controller('')
 export class HomeController {
@@ -18,6 +20,10 @@ export class HomeController {
     @InjectRepository(Banner) private bannerRepository: Repository<Banner>,
     @InjectRepository(Consumer)
     private consumerRepository: Repository<Consumer>,
+    @InjectRepository(City)
+    private cityRepository: Repository<City>,
+    @InjectRepository(Hospital)
+    private hospitalRepository: Repository<Hospital>,
   ) {}
 
   @Get('/api/v1.index/get_swiper_list')
@@ -44,19 +50,20 @@ export class HomeController {
 
   @Get('/api/v1.index/get_city_list')
   @Authorize()
-  async getCityList() {
-    return city;
+  @Page()
+  getCityList() {
+    return this.cityRepository.findAndCount();
   }
 
   @Get('/api/v1.hospital/get_list')
   @Authorize()
+  @Page()
   hospitalGetList(@Query('city_id') city_id) {
-    console.log(typeof city_id, city_id);
-    return {
-      list: hospital.rows.filter(
-        (item) => Number(item.city_id) === Number(city_id),
-      ),
-    };
+    return this.hospitalRepository.findAndCount({
+      where: {
+        city_id,
+      },
+    });
   }
 
   @Get('/api/v1.server/get_hospital_list')

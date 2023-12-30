@@ -84,11 +84,6 @@ export class AuthGuard implements CanActivate {
       return e.replace(/:/g, '/');
     });
     // 遍历权限是否包含该url，不包含则无访问权限
-    console.log(
-      permArray,
-      path.replace(`/${ADMIN_PREFIX}/`, '').replace(/^\//, ''),
-      path,
-    );
     if (
       !permArray.includes(
         path.replace(`/${ADMIN_PREFIX}/`, '').replace(/^\//, ''),

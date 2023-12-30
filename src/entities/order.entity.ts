@@ -1,27 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
 @Entity({ name: 'order' })
 export default class Order extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  @ApiProperty()
-  id: number;
-
   @Column()
-  @ApiProperty()
+  @ApiProperty({
+    description: '优惠券编码',
+  })
   order_no: string;
 
   @Column()
-  @ApiProperty()
+  @ApiProperty({ description: '城市ID' })
   city_id: number;
 
   @Column()
-  @ApiProperty()
+  @ApiProperty({ description: '医院ID' })
   hospital_id: string;
 
   @Column()
-  @ApiProperty()
+  @ApiProperty({
+    description: '服务类型Id',
+  })
   server_id: number;
 
   @Column()
@@ -40,25 +40,28 @@ export default class Order extends BaseEntity {
   @ApiProperty()
   remark: string;
 
-  // 用户ID
   @Column()
-  @ApiProperty()
+  @ApiProperty({
+    description: '用户ID',
+  })
   user_id: number;
 
-  // 陪诊师ID
   @Column({
     nullable: true,
     default: null,
   })
-  @ApiProperty()
+  @ApiProperty({
+    description: '陪诊师ID',
+  })
   member_id?: string;
 
-  // 接单事件
   @Column({
     nullable: true,
     default: null,
   })
-  @ApiProperty()
+  @ApiProperty({
+    description: '接单时间',
+  })
   receiving_time: string;
 
   @Column()

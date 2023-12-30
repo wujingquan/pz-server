@@ -20,6 +20,7 @@ import CouponLog from '@/entities/couponLog.entity';
 import { queryUserCouponDto } from '@/modules/api/coupon/dto/dto';
 import { Page } from '@/common/decorators/page.decorator';
 import { User } from '@/common/decorators/user.decorator';
+import { ApiPageOptionsDto } from '@/common/dto/page.dto';
 
 @Controller('/api/v1.coupon')
 export class CouponController {
@@ -30,35 +31,10 @@ export class CouponController {
     private couponLogRepository: Repository<CouponLog>,
   ) {}
 
-  @Post()
-  create(@Body() createCouponDto: CreateCouponDto) {
-    return this.couponService.create(createCouponDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.couponService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.couponService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCouponDto: UpdateCouponDto) {
-    return this.couponService.update(+id, updateCouponDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.couponService.remove(+id);
-  }
-
   @Get('get_user_coupon_list')
   @Authorize()
   @Page()
-  async getUserCouponList(
+  getUserCouponList(
     @Query() query: queryUserCouponDto,
     @User('id') uid: number,
   ) {
@@ -68,25 +44,21 @@ export class CouponController {
     if (isNumber(query.status)) {
       where['status'] = query.status;
     }
-    const [list, total] = await this.couponLogRepository.findAndCount({
+    return this.couponLogRepository.findAndCount({
       where,
       skip: query.offset,
       take: query.limit,
     });
-    return {
-      list,
-      total,
-    };
   }
 
   @Get('get_can_coupon_list')
   @Authorize()
-  async getUserCanCouponList() {
-    const [list, total] = await this.couponRepository.findAndCount();
-    return {
-      list,
-      total,
-    };
+  @Page()
+  getUserCanCouponList(@Query() query: ApiPageOptionsDto) {
+    return this.couponRepository.findAndCount({
+      skip: query.offset,
+      take: query.limit,
+    });
   }
 
   @Post('draw_coupon')
