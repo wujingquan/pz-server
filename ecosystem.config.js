@@ -51,7 +51,7 @@ module.exports = {
       user: 'root',
       host: 'pz.wujingquan.com',
       ref: 'origin/main',
-      repo: 'https://gitclone.com/github.com/wujingquan/pz-server.git',
+      repo: 'https://mirror.ghproxy.com/https://github.com/wujingquan/pz-server.git',
       path: '/home/wwwroot/nodejs-projects/peizhen/pz-server',
       'post-deploy':
         'nvm use && npm install && npm run build && pm2 reload ecosystem.config.js --env production',
