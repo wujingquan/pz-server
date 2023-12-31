@@ -44,7 +44,7 @@ export class ServerController {
   async page(
     @Body() dto: PageSearchUserDto,
   ): Promise<PaginatedResponseDto<PageSearchUserInfo>> {
-    const [list, total] = await this.serverService.page();
+    const [list, total] = await this.serverService.page(dto);
     return {
       list,
       pagination: {

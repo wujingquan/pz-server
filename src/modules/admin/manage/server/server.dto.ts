@@ -68,17 +68,44 @@ export class UpdatePasswordDto {
 }
 
 export class CreateEntityDto {
-  @ApiProperty({
-    description: '服务类型名称',
-  })
   @IsString()
-  name: string;
+  server_name: string;
 
-  @ApiProperty({
-    description: '服务类型图标',
-  })
   @IsString()
   images: string;
+
+  @IsString()
+  content: string;
+
+  @IsNumber()
+  price: number;
+
+  @IsNumber()
+  status: number;
+
+  @IsNumber()
+  weigh: number;
+
+  @IsNumber()
+  hospital_id: number;
+
+  @IsNumber()
+  have_discount: number;
+
+  @IsNumber()
+  discount_price: number;
+
+  @IsNumber()
+  have_night_server: number;
+
+  @IsString()
+  night_start_time: string;
+
+  @IsString()
+  night_end_time: string;
+
+  @IsNumber()
+  night_other_money: number;
 }
 
 export class UpdateUserDto extends CreateEntityDto {
@@ -110,7 +137,12 @@ export class DeleteEntityDto {
   ids: number[];
 }
 
-export class PageSearchUserDto extends PageOptionsDto {}
+export class PageSearchUserDto extends PageOptionsDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  hospital_id?: number;
+}
 
 export class PasswordUserDto {
   @ApiProperty({

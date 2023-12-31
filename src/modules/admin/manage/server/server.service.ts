@@ -15,8 +15,14 @@ export class ServerService {
     await this.serverTypeRepository.insert(param);
   }
 
-  async page(): Promise<[any, number]> {
-    return await this.serverTypeRepository.findAndCount();
+  async page(args): Promise<[any, number]> {
+    const where = {};
+    if (args.hospital_id) {
+      where['hospital_id'] = args.hospital_id;
+    }
+    return await this.serverTypeRepository.findAndCount({
+      where,
+    });
   }
 
   async info(id) {
