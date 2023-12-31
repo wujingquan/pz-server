@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'nest-admin-api', // 项目名字,启动后的名字
+      name: 'pz-server', // 项目名字,启动后的名字
       script: './dist/main.js', // 执行的文件
       cwd: './', // 根目录
       args: '', // 传递给脚本的参数
@@ -49,10 +49,10 @@ module.exports = {
   deploy: {
     production: {
       user: 'root',
-      host: '39.108.99.86',
-      ref: 'origin/master',
-      repo: 'git@github.com:repo.git',
-      path: '/var/www/AnJiaMallServer',
+      host: 'pz.wujingquan.com',
+      ref: 'origin/main',
+      repo: 'https://gitclone.com/github.com/wujingquan/pz-server.git',
+      path: '/home/wwwroot/nodejs-projects/peizhen/pz-server',
       'post-deploy':
         'npm install && npm run build && pm2 reload ecosystem.config.js --env production',
     },
