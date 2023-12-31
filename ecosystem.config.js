@@ -54,7 +54,7 @@ module.exports = {
       repo: 'https://gitclone.com/github.com/wujingquan/pz-server.git',
       path: '/home/wwwroot/nodejs-projects/peizhen/pz-server',
       'post-deploy':
-        'npm install && npm run build && pm2 reload ecosystem.config.js --env production',
+        'nvm use && npm install && npm run build && pm2 reload ecosystem.config.js --env production',
     },
   },
 };
