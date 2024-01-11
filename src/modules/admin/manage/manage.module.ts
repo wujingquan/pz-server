@@ -9,6 +9,7 @@ import { HospitalModule } from './hosiptal/hospital.module';
 import { ADMIN_PREFIX } from '@/modules/admin/admin.constants';
 import { ServerTypeModule } from '@/modules/admin/manage/serverType/serverType.module';
 import { ServerModule } from '@/modules/admin/manage/server/server.module';
+import { DisclaimerModule } from '@/modules/admin/manage/disclaimer/disclaimer.module';
 
 @Module({
   imports: [
@@ -45,6 +46,10 @@ import { ServerModule } from '@/modules/admin/manage/server/server.module';
         path: ADMIN_PREFIX + '/manage',
         children: [{ path: 'server', module: ServerModule }],
       },
+      {
+        path: ADMIN_PREFIX + '/manage',
+        children: [{ path: 'disclaimer', module: DisclaimerModule }],
+      },
     ]),
     BannerModule,
     CouponModule,
@@ -54,6 +59,7 @@ import { ServerModule } from '@/modules/admin/manage/server/server.module';
     HospitalModule,
     ServerTypeModule,
     ServerModule,
+    DisclaimerModule,
   ],
   controllers: [],
   providers: [],
