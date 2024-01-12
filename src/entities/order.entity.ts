@@ -91,9 +91,9 @@ export default class Order extends BaseEntity {
   @ApiProperty()
   finished_time: string;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  transaction_id: string;
+  transaction_id: null | string = null;
 
   @Column()
   @ApiProperty()
@@ -103,47 +103,47 @@ export default class Order extends BaseEntity {
   @ApiProperty()
   age: string;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  night_other_money: string;
+  night_other_money: null | string = null;
 
   @Column()
   @ApiProperty()
   total_price: string;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  coupon_log_id: string;
+  coupon_log_id: null | string = null;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  coupon_price: string;
+  coupon_price: null | string = null;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  sum_price: string;
+  sum_price: null | string = null;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  visit_time_text: string;
+  visit_time_text: null | string = null;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  receiving_time_text: string;
+  receiving_time_text: null | string = null;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  create_time_text: string;
+  create_time_text: null | string = null;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  payment_time_text: string;
+  payment_time_text: null | string = null;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  cancel_time_text: string;
+  cancel_time_text: null | string = null;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  finished_time_text: string;
+  finished_time_text: null | string = null;
 }

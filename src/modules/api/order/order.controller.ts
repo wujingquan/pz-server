@@ -1,83 +1,94 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import dayjs from 'dayjs';
-import { customAlphabet, nanoid } from 'nanoid';
-import { OrderService } from './order.service';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
-import { Authorize } from '@/modules/admin/core/decorators/authorize.decorator';
+import { customAlphabet } from 'nanoid';
 import Order from '@/entities/order.entity';
 import { User } from '@/common/decorators/user.decorator';
+import { PermissionOptional } from '@/modules/admin/core/decorators/permission-optional.decorator';
+import Server from '@/entities/server.entity';
+import { Page } from '@/common/decorators/page.decorator';
+import Hospital from '@/entities/hospital.entity';
 
 @Controller('/api/v1.order')
 export class OrderController {
   constructor(
-    private readonly orderService: OrderService,
     @InjectRepository(Order) private orderRepository: Repository<Order>,
+    @InjectRepository(Server) private serverRepository: Repository<Server>,
   ) {}
 
-  @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.orderService.create(createOrderDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.orderService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.orderService.update(+id, updateOrderDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderService.remove(+id);
-  }
-
   @Post('submit_order')
-  @Authorize()
-  async submitOrder(@Body() body, @User('id') uid: number) {
+  @PermissionOptional()
+  async submitOrder(@Body() body, @User() user) {
     // 生成订单号
     const nanoid = customAlphabet('0123456789', 6);
     const order_no = dayjs().format('YYYYMMDDHHmmss') + nanoid();
     console.log('order_no', order_no);
-    const { city_id, hospital_id, server_id, visit_time, yuyuetime } = body;
-    // const server = await this.
+    const server = await this.serverRepository.findOneBy({
+      id: body.server_id,
+    });
+    console.log(server);
 
     const order = this.orderRepository.create({
-      // name: body.name,
-      // mobile: body.mobile,
-      // age: body.age,
-      // remark: body.remark,
-      // order_no,
-      // user_id: 1,
-      // city_id,
-      // hospital_id,
-      // server_id,
-      // visit_time,
-      // price: body.price
       ...body,
       order_no,
-      user_id: uid,
+      user_id: user.uid,
+      price: server.price,
+      status: 0,
+      total_price: 0,
     });
     console.log('order', order);
     await this.orderRepository.save(order);
     return order;
+  }
+
+  @Get('get_order_list')
+  @PermissionOptional()
+  @Page()
+  getOrderList(@User('uid') uid: number, @Query() query) {
+    return this.orderRepository
+      .createQueryBuilder('order')
+      .leftJoinAndMapOne(
+        'order.hospital_info',
+        Hospital,
+        'hospital',
+        'hospital.id=order.hospital_id',
+      )
+      .leftJoinAndMapOne(
+        'order.server_info',
+        Server,
+        'server',
+        'server.id=order.server_id',
+      )
+      .where({
+        user_id: uid,
+        status: query.status,
+      })
+      .getManyAndCount();
+  }
+
+  @Get('get_order_info')
+  @PermissionOptional()
+  @Page()
+  getOrderInfo(@User('uid') uid: number, @Query('order_id') order_id: number) {
+    return this.orderRepository
+      .createQueryBuilder('order')
+      .leftJoinAndMapOne(
+        'order.hospital_info',
+        Hospital,
+        'hospital',
+        'hospital.id=order.hospital_id',
+      )
+      .leftJoinAndMapOne(
+        'order.server_info',
+        Server,
+        'server',
+        'server.id=order.server_id',
+      )
+      .where({
+        id: order_id,
+        user_id: uid,
+      })
+      .getOne();
   }
 }
