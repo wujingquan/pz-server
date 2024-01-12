@@ -6,9 +6,12 @@ import Banner from '@/entities/admin/banner.entity';
 import Consumer from '@/entities/consumer.entity';
 import City from '@/entities/city.entity';
 import Hospital from '@/entities/hospital.entity';
+import Server from '@/entities/server.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Banner, Consumer, City, Hospital])],
+  imports: [
+    TypeOrmModule.forFeature([Banner, Consumer, City, Hospital, Server]),
+  ],
   controllers: [HomeController],
   providers: [HomeService],
 })

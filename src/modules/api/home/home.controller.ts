@@ -12,6 +12,7 @@ import Consumer from '@/entities/consumer.entity';
 import City from '@/entities/city.entity';
 import { Page } from '@/common/decorators/page.decorator';
 import Hospital from '@/entities/hospital.entity';
+import Server from '@/entities/server.entity';
 
 @Controller('')
 export class HomeController {
@@ -24,6 +25,8 @@ export class HomeController {
     private cityRepository: Repository<City>,
     @InjectRepository(Hospital)
     private hospitalRepository: Repository<Hospital>,
+    @InjectRepository(Server)
+    private serverRepository: Repository<Server>,
   ) {}
 
   @Get('/api/v1.index/get_swiper_list')
@@ -99,34 +102,25 @@ export class HomeController {
    */
   @Get('/api/v1.hospital/server_get_list')
   @Authorize()
-  getServerList(@Query('city_id') city_id, @Query('server_name') server_name) {
-    console.log(city_id, server_name);
+  async getServerList(
+    @Query('city_id') city_id,
+    @Query('server_name') server_name,
+  ) {
+    const serverList = await this.serverRepository.findBy({ server_name });
+    const hospitalList = await this.hospitalRepository.findBy({ city_id });
     const obj = {
       list: [],
     };
-    if (city_id && !server_name) {
-      obj.list = hospital.rows.filter(
-        (item) => item.city_id === Number(city_id),
+    for (const hospital of hospitalList) {
+      const server = serverList.find(
+        (server) => server.hospital_id === hospital.id,
       );
-    } else if (!city_id && server_name) {
-      const hospitalIdList = server
-        .filter((item) => item.server_name === server_name)
-        .map((item) => item.hospital_id);
-      obj.list = hospital.rows.filter((item) =>
-        hospitalIdList.includes(item.id),
-      );
-    } else if (city_id && server_name) {
-      const inServerhospitalIdList = server
-        .filter((item) => item.server_name === server_name)
-        .map((item) => item.hospital_id);
-
-      obj.list = hospital.rows.filter(
-        (item) =>
-          item.city_id === Number(city_id) &&
-          inServerhospitalIdList.includes(item.id),
-      );
-    } else {
-      obj.list = [];
+      if (server) {
+        obj.list.push({
+          ...hospital,
+          server,
+        });
+      }
     }
     return obj;
   }
