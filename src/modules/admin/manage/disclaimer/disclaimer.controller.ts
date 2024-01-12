@@ -8,7 +8,6 @@ import {
 import { PaginatedResponseDto } from 'src/common/class/res.class';
 import { ADMIN_PREFIX } from '../../admin.constants';
 import {
-  CreateEntityDto,
   InfoDisclaimerDto,
   PageSearchUserDto,
   UpdateDisclaimerDto,
@@ -24,7 +23,7 @@ export class DisclaimerController {
   constructor(private disclaimerService: DisclaimerService) {}
 
   @Post('add')
-  async add(@Body() dto: CreateEntityDto): Promise<void> {
+  async add(@Body() dto: Disclaimer): Promise<void> {
     await this.disclaimerService.add(dto);
   }
 
@@ -46,7 +45,6 @@ export class DisclaimerController {
     @Body() dto: PageSearchUserDto,
   ): Promise<PaginatedResponseDto<PageSearchUserInfo>> {
     const [list, total] = await this.disclaimerService.page(dto);
-    console.log(list, total);
     return {
       list,
       pagination: {

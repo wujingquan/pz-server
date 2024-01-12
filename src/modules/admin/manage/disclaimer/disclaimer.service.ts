@@ -2,10 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Disclaimer from 'src/entities/disclaimer.entity';
 import { Repository } from 'typeorm';
-import {
-  CreateEntityDto,
-  PageSearchUserDto,
-} from '@/modules/admin/manage/disclaimer/disclaimer.dto';
+import { PageSearchUserDto } from '@/modules/admin/manage/disclaimer/disclaimer.dto';
 
 @Injectable()
 export class DisclaimerService {
@@ -14,7 +11,7 @@ export class DisclaimerService {
     private disclaimerRepository: Repository<Disclaimer>,
   ) {}
 
-  async add(param: CreateEntityDto): Promise<void> {
+  async add(param: Disclaimer): Promise<void> {
     await this.disclaimerRepository.insert(param);
   }
 
