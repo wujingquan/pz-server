@@ -2,6 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
+const defaultValue = {
+  money: 0,
+};
+
 @Entity({ name: 'member' })
 export default class Member extends BaseEntity {
   @Column()
@@ -52,11 +56,11 @@ export default class Member extends BaseEntity {
   })
   mobile: string;
 
-  @Column()
+  @Column({ default: 0, type: 'decimal', precision: 10, scale: 2 })
   @ApiProperty({
     description: '余额',
   })
-  money: string;
+  money: number = defaultValue.money;
 
   @Column()
   @ApiProperty({
@@ -74,5 +78,5 @@ export default class Member extends BaseEntity {
   @ApiProperty({
     description: '用户ID',
   })
-  user_id: string;
+  user_id: number;
 }

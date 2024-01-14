@@ -10,6 +10,7 @@ import { ADMIN_PREFIX } from '@/modules/admin/admin.constants';
 import { ServerTypeModule } from '@/modules/admin/manage/serverType/serverType.module';
 import { ServerModule } from '@/modules/admin/manage/server/server.module';
 import { DisclaimerModule } from '@/modules/admin/manage/disclaimer/disclaimer.module';
+import { WithdrawalModule } from '@/modules/admin/manage/withdrawal/withdrawal.module';
 
 @Module({
   imports: [
@@ -50,6 +51,10 @@ import { DisclaimerModule } from '@/modules/admin/manage/disclaimer/disclaimer.m
         path: ADMIN_PREFIX + '/manage',
         children: [{ path: 'disclaimer', module: DisclaimerModule }],
       },
+      {
+        path: ADMIN_PREFIX + '/manage',
+        children: [{ path: 'withdrawal', module: WithdrawalModule }],
+      },
     ]),
     BannerModule,
     CouponModule,
@@ -60,6 +65,7 @@ import { DisclaimerModule } from '@/modules/admin/manage/disclaimer/disclaimer.m
     ServerTypeModule,
     ServerModule,
     DisclaimerModule,
+    WithdrawalModule,
   ],
   controllers: [],
   providers: [],
