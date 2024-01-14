@@ -94,9 +94,9 @@ export class MemberController {
     const nanoid = customAlphabet('0123456789', 6);
     const order_no = dayjs().format('YYYYMMDDHHmmss') + nanoid();
     const withdrawal = this.withdrawalRepo.create({
+      ...body,
       order_no,
       member_id: member.id,
-      money: body.money,
     });
 
     // 事务

@@ -1,11 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity } from 'typeorm';
-import { IsNumber, Min } from 'class-validator';
+import { IsIn, IsNumber, Min } from 'class-validator';
 import { BaseEntity } from './base.entity';
-
-const defaultValue = {
-  audit_status: 0,
-};
 
 @Entity({ name: 'withdrawal' })
 export default class Withdrawal extends BaseEntity {
@@ -42,5 +38,6 @@ export default class Withdrawal extends BaseEntity {
   audit_time: Date;
 
   @Column()
+  @IsIn([1, 2, 3])
   client_type: number; // 1 APP， 2 微信小程序，3 web
 }
